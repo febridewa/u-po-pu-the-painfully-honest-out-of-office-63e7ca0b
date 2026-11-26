@@ -16,7 +16,19 @@ if (ENTRY.length < 1 || ENTRY.length > 200 || ENTRY.trim().length === 0) {
   throw new Error(`entry must be 1-200 characters, got ${ENTRY.length}`);
 }
 
+// One sentence: exactly one terminal period, at the end. The gate counts
+// characters, but an exact rate tie breaks to the smaller text in bytes,
+// so keep the byte count tight too (the em dash costs 3 bytes).
+const TERMINATORS = (ENTRY.match(/[.!?]/g) ?? []).length;
+if (TERMINATORS !== 1 || !ENTRY.endsWith(".")) {
+  throw new Error(`entry must be one sentence, got ${TERMINATORS} terminators`);
+}
+const BYTES = Buffer.byteLength(ENTRY, "utf8");
+if (BYTES > 200) {
+  throw new Error(`entry must be at most 200 bytes, got ${BYTES}`);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", ENTRY, "utf8");
 console.log(ENTRY);
-console.log(`chars: ${ENTRY.length}`);
+console.log(`chars: ${ENTRY.length}, bytes: ${BYTES}`);

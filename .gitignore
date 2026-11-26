@@ -4,3 +4,8 @@ u-po-pu-the-painfully-honest-out-of-office-63e7ca0b-kit/
 requirements.json
 transcripts.tar.gz
 prompt.txt
+prompt-person.txt
+bundle.json
+bundle.log
+bundle-dryrun.err
+check.log
